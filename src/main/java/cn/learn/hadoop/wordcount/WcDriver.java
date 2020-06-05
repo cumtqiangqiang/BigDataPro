@@ -28,7 +28,9 @@ public class WcDriver {
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
-
+// 逻辑一样 直接用reducer 代替，在map端合并
+//        job.setCombinerClass(WcCombiner.class);
+        job.setCombinerClass(WcReducer.class);
 
         FileInputFormat.setInputPaths(job,new Path(args[0]));
         FileOutputFormat.setOutputPath(job,new Path(args[1]));

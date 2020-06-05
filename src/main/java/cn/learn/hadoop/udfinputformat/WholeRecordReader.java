@@ -56,7 +56,7 @@ public class WholeRecordReader extends RecordReader {
             }finally {
                 IOUtils.closeStream(fis);
             }
-            isProgress = true;
+            isProgress = false;
             return  true;
 
         }
