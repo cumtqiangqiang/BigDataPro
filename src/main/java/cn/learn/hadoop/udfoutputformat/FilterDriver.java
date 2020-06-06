@@ -9,6 +9,9 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 import java.io.IOException;
 
+/**
+ * 自定义outputformat 将含有指定 字符串的 line 输入到指定文件夹中
+ */
 public class FilterDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
