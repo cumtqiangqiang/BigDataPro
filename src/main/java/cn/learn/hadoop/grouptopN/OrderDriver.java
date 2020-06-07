@@ -1,4 +1,4 @@
-package cn.learn.hadoop.topN;
+package cn.learn.hadoop.grouptopN;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;

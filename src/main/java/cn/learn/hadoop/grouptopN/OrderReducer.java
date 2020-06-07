@@ -1,4 +1,4 @@
-package cn.learn.hadoop.topN;
+package cn.learn.hadoop.grouptopN;
 
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Reducer;
