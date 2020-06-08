@@ -1,5 +1,6 @@
 package cn.learn.hadoop.udfinputformat;
 
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
@@ -15,8 +16,7 @@ import java.io.IOException;
  */
 public class SequenceFileDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
-                ".2" );
+        System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
 // 1 获取job对象
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf);

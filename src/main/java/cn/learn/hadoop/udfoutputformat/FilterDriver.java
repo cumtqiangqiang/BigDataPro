@@ -1,5 +1,7 @@
 package cn.learn.hadoop.udfoutputformat;
 
+import common.utils.ConfigurationManager;
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -14,12 +16,14 @@ import java.io.IOException;
  */
 public class FilterDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
-                ".2" );
+        if (ConfigurationManager.getBoolean(Constant.HADOOP_RUN_LOCAL)){
+            System.setProperty("hadoop.home.dir", Constant.HADOOP_COMPANY_PATH);
+            args = new String[] { "C:/Users/Administrator/Desktop/Project" +
+                    "/Data/udfoutpurformat", "C:/Users/Administrator/Desktop" +
+                    "/Project/Data/output"};
+        }
 
-        args = new String[] { "C:\\Users\\Administrator\\Desktop\\Project" +
-                "\\Data\\udfoutpurformat", "C:\\Users\\Administrator\\Desktop" +
-                "\\Project\\Data\\output"};
+
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf);
 

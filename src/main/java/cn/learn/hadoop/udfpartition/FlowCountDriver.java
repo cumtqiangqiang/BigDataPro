@@ -1,4 +1,6 @@
 package cn.learn.hadoop.udfpartition;
+import common.utils.ConfigurationManager;
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 
@@ -14,11 +16,14 @@ import java.io.IOException;
  */
 public class FlowCountDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
-                ".2" );
+        if (ConfigurationManager.getBoolean(Constant.HADOOP_RUN_LOCAL)){
 
-        args = new String[] { "C:\\Users\\Administrator\\Desktop\\Project\\Data\\phone",
-                "C:\\Users\\Administrator\\Desktop\\Project\\Data\\output" };
+            System.setProperty("hadoop.home.dir", Constant.HADOOP_COMPANY_PATH);
+            args = new String[] { "C:/Users/Administrator/Desktop/Project/Data/phone",
+                    "C:/Users/Administrator/Desktop/Project/Data/output" };
+        }
+
+
         // 1 获取配置信息，或者job对象实例
         Configuration configuration = new Configuration();
         Job job = Job.getInstance(configuration);

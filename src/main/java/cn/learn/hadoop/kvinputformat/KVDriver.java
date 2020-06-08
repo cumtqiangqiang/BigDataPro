@@ -1,6 +1,7 @@
 package cn.learn.hadoop.kvinputformat;
 
 
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -15,8 +16,7 @@ import java.io.IOException;
 
 public class KVDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
-                ".2" );
+        System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
         Configuration conf = new Configuration();
         conf.set(KeyValueLineRecordReader.KEY_VALUE_SEPERATOR," ");
         Job job = Job.getInstance(conf);

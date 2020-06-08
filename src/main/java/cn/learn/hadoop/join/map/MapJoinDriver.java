@@ -1,5 +1,6 @@
 package cn.learn.hadoop.join.map;
 
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -18,7 +19,8 @@ import java.net.URISyntaxException;
  */
 public class MapJoinDriver {
     public static void main(String[] args) throws IOException, URISyntaxException, ClassNotFoundException, InterruptedException {
-        System.setProperty("hadoop.home.dir", "D:/bigDataInstall/hadoop-2.7.2");
+        System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
+
         args = new String[]{"C:/Users/Administrator/Desktop/Project/Data" +
                 "/ReduceJoin/order.txt", "C:/Users/Administrator/Desktop" +
                 "/Project/Data/output"};

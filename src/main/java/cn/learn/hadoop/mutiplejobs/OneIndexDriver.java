@@ -1,5 +1,6 @@
 package cn.learn.hadoop.mutiplejobs;
 
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -13,8 +14,7 @@ import java.io.IOException;
 public class OneIndexDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-        System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
-                ".2" );
+        System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
         args = new String[]{"C:/Users/Administrator/Desktop/Project/Data" +
                 "/mutilpleJobs","C:/Users/Administrator/Desktop/Project/Data" +
                 "/output"};

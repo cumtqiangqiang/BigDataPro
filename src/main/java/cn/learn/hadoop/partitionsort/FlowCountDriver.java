@@ -1,6 +1,7 @@
 package cn.learn.hadoop.partitionsort;
 
 import cn.learn.hadoop.partitionsort.FlowBean;
+import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
@@ -15,8 +16,7 @@ import java.io.IOException;
  */
 public class FlowCountDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        System.setProperty("hadoop.home.dir", "D:\\bigDataInstall\\hadoop-2.7" +
-                ".2" );
+        System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
 
         args = new String[] { "C:\\Users\\Administrator\\Desktop\\Project\\Data\\phoneFlow",
                 "C:\\Users\\Administrator\\Desktop\\Project\\Data\\output1" };
