@@ -1,6 +1,5 @@
 package cn.learn.hadoop.wordcount;
 
-import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 import common.utils.ConfigurationManager;
 import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
@@ -18,18 +17,18 @@ public class WcDriver {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-//        if (ConfigurationManager.getBoolean(Constant.HADOOP_RUN_LOCAL)){
-//            if (ConfigurationManager.getBoolean(Constant.COMPANY_RUN)){
+        if (ConfigurationManager.getBoolean(Constant.HADOOP_RUN_LOCAL)){
+            if (ConfigurationManager.getBoolean(Constant.COMPANY_RUN)){
                 System.setProperty("hadoop.home.dir", Constant.HADOOP_COMPANY_PATH);
                 args = new String[] { "C:\\Users\\UC227911\\Desktop\\Pro\\testData\\input\\word.txt",
                         Constant.COMPANY_OUTPUT};
-//            }else {
-//                System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
-//                args = new String[] { "C:/Users/Administrator/Desktop/Project/Data/phone",
-//                        Constant.HOME_OUTPUT };
-//            }
+            }else {
+                System.setProperty("hadoop.home.dir", Constant.HADOOP_HOME_PATH);
+                args = new String[] {Constant.HOME_INPUT+"wc",
+                        Constant.HOME_OUTPUT };
+            }
 
-//        }
+        }
 
         Job job = Job.getInstance(new Configuration());
         job.setJarByClass(WcDriver.class);

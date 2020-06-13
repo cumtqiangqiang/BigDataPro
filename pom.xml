@@ -6,7 +6,11 @@
 
     <groupId>com.qiang</groupId>
     <artifactId>BigDataPro</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>hivelearn</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -34,7 +38,23 @@
             <artifactId>hadoop-hdfs</artifactId>
             <version>2.7.2</version>
         </dependency>
-<!--        <dependency>-->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.10</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-exec</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+
+
+
+        <!--        <dependency>-->
 <!--            <groupId>jdk.tools</groupId>-->
 <!--            <artifactId>jdk.tools</artifactId>-->
 <!--            <version>1.8</version>-->
