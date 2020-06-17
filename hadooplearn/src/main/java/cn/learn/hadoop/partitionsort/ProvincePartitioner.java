@@ -1,6 +1,5 @@
 package cn.learn.hadoop.partitionsort;
 
-import cn.learn.hadoop.partitionsort.FlowBean;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Partitioner;
 

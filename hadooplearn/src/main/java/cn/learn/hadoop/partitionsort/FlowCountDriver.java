@@ -1,6 +1,5 @@
 package cn.learn.hadoop.partitionsort;
 
-import cn.learn.hadoop.partitionsort.FlowBean;
 import common.utils.Constant;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
