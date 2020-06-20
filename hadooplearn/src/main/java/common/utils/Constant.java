@@ -1,6 +1,6 @@
 package common.utils;
 
-public interface Constant {
+public  interface Constant {
     String COMPANY_RUN = "company.run";
     String HADOOP_RUN_LOCAL = "hadoop.local";
 

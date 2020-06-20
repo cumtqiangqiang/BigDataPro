@@ -12,6 +12,7 @@
         <module>hivelearn</module>
         <module>flumelearn</module>
         <module>hadooplearn</module>
+        <module>kafkalearn</module>
     </modules>
 
     <build>
