@@ -13,6 +13,7 @@
         <module>flumelearn</module>
         <module>hadooplearn</module>
         <module>kafkalearn</module>
+        <module>hbaselearn</module>
     </modules>
 
     <build>

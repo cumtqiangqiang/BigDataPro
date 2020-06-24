@@ -22,10 +22,16 @@ public class TypeInterceptor implements Interceptor {
         byte[] body = event.getBody();
         String info = new String(body);
 
+//        if (info.contains("qiang")){
+//            headers.put("type","Q");
+//        }else {
+//            headers.put("type","F");
+//        }
+// kafka sink 的时候，如果 key 配置为topic，会进入不同的topic
         if (info.contains("qiang")){
-            headers.put("type","Q");
+            headers.put("topic","first");
         }else {
-            headers.put("type","F");
+            headers.put("topic","second");
         }
 
         return event;

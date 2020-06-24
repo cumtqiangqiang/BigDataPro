@@ -18,7 +18,7 @@ public class CallBackProducer {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(pros);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 500000; i++) {
             ProducerRecord<String, String> record = new ProducerRecord<String,
                     String>("first", "qiang->" + i + "<-fiona");
 
