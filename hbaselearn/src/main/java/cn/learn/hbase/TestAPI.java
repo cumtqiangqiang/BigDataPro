@@ -26,15 +26,15 @@ public class TestAPI {
 
     }
 
-    private static void close(){
-        if (admin != null){
+    private static void close() {
+        if (admin != null) {
             try {
                 admin.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (connection != null){
+        if (connection != null) {
             try {
                 connection.close();
             } catch (IOException e) {
@@ -52,17 +52,18 @@ public class TestAPI {
 
     /**
      * 创建表
+     *
      * @param tableName
-     * @param cls  列簇
+     * @param cls       列簇
      * @throws IOException
      */
-    private static void createTable(String tableName,String ...cls) throws IOException {
-        if (cls.length == 0){
+    private static void createTable(String tableName, String... cls) throws IOException {
+        if (cls.length == 0) {
             System.out.println("Please input column family");
             return;
         }
         try {
-            if (isTableExist(tableName)){
+            if (isTableExist(tableName)) {
                 System.out.println("表已经存在");
                 return;
             }
@@ -85,12 +86,13 @@ public class TestAPI {
 
     /**
      * 删除表
+     *
      * @param tableName
      * @throws IOException
      */
     private static void dropTable(String tableName) throws IOException {
         try {
-            if (!isTableExist(tableName)){
+            if (!isTableExist(tableName)) {
                 System.out.println(tableName + " 表不存在");
                 return;
             }
@@ -102,16 +104,16 @@ public class TestAPI {
         admin.disableTable(TableName.valueOf(tableName));
         admin.deleteTable(TableName.valueOf(tableName));
 
-
     }
 
     /**
      * 创建命名空间
+     *
      * @param ns
      */
-    private static void createNameSpace(String ns){
+    private static void createNameSpace(String ns) {
         NamespaceDescriptor nsDescriptor =
-                 NamespaceDescriptor.create(ns).build();
+                NamespaceDescriptor.create(ns).build();
 
         try {
             admin.createNamespace(nsDescriptor);
@@ -124,12 +126,13 @@ public class TestAPI {
 
     /**
      * 插入数据
+     *
      * @param
      * @throws IOException
      */
 
-    private static void putData(String tableName,String rowKey,String cf,
-                               String cn,String value) throws IOException {
+    private static void putData(String tableName, String rowKey, String cf,
+                                String cn, String value) throws IOException {
 
         Table table = connection.getTable(TableName.valueOf(tableName));
         Put put = new Put(Bytes.toBytes(rowKey));
@@ -137,26 +140,68 @@ public class TestAPI {
                 Bytes.toBytes(value));
         table.put(put);
 
-        connection.close();
+        table.close();
 
     }
-    private static void getData(String tableName,String rowKey,String cf,
+
+    private static void getData(String tableName, String rowKey, String cf,
                                 String cn) throws IOException {
         Table table = connection.getTable(TableName.valueOf(tableName));
 
         Get get = new Get(Bytes.toBytes(rowKey));
 //        get.addFamily(Bytes.toBytes(cf));
-        get.addColumn(Bytes.toBytes(cf),Bytes.toBytes(cn));
+        get.addColumn(Bytes.toBytes(cf), Bytes.toBytes(cn));
         Result result = table.get(get);
 //        result.rawCells() 获取该行数据的所有cell
         for (Cell cell : result.rawCells()) {
-            System.out.println("CF: "+Bytes.toString(CellUtil.cloneFamily(cell)) +
-                    " CN: "+Bytes.toString(CellUtil.cloneQualifier(cell)) +
-                    " Value: "+Bytes.toString(CellUtil.cloneValue(cell)));
+            System.out.println("CF: " + Bytes.toString(CellUtil.cloneFamily(cell)) +
+                    " CN: " + Bytes.toString(CellUtil.cloneQualifier(cell)) +
+                    " Value: " + Bytes.toString(CellUtil.cloneValue(cell)));
         }
 
     }
 
+    private static void scanTable(String tableName) throws IOException {
+        Table table = connection.getTable(TableName.valueOf(tableName));
+
+//        Scan scan = new Scan();
+        Scan scan = new Scan(Bytes.toBytes("1001"), Bytes.toBytes("1003"));
+        ResultScanner scanner = table.getScanner(scan);
+        for (Result result : scanner) {
+            for (Cell cell : result.rawCells()) {
+                System.out.println("RowKey: " + Bytes.toString(CellUtil.cloneRow(cell)) + " " +
+                        "CF: " + Bytes.toString(CellUtil.cloneFamily(cell)) +
+                        " CN: " + Bytes.toString(CellUtil.cloneQualifier(cell)) +
+                        " Value: " + Bytes.toString(CellUtil.cloneValue(cell)));
+            }
+        }
+
+        table.close();
+
+    }
+
+    private static void deleteData(String tableName, String rowKey, String cf,
+                                   String cn) throws IOException {
+
+        Table table = connection.getTable(TableName.valueOf(tableName));
+//        shell 里根绝row key 删除的命令是 deleteall
+        Delete delete = new Delete(Bytes.toBytes(rowKey));
+
+//addColumns 会将列的所有版本删除
+//        delete.addColumns(Bytes.toBytes(cf),Bytes.toBytes(cn));
+//    addColumn  如果建表的时候版本是1 的话，put 两次数据，还未flush 到磁盘，执行删除操作，更新之前的数据还会返回
+//        flush 到磁盘后就不会出来，所以少用这种方法
+//        delete.addColumn(Bytes.toBytes(cf),Bytes.toBytes(cn));
+
+//      删除指定时间戳的列  标记为delete
+//        delete.addColumn(Bytes.toBytes(cf),Bytes.toBytes(cn),1593074703332L);
+
+//        删除指定的列簇  shell 里不可以
+        delete.addFamily(Bytes.toBytes(cf));
+        table.delete(delete);
+        table.close();
+        System.out.println("删除成功");
+    }
 
 
     public static void main(String[] args) throws IOException {
@@ -169,7 +214,10 @@ public class TestAPI {
 //
 //        dropTable("stu3");
 //        putData("stu2","1001","info","name","Hello");
-        getData("stu2","1001","info","name");
+//        getData("stu2","1001","info","name");
+//        scanTable("stu2");
+
+        deleteData("stu2", "1004", "info", "name");
         close();
 
     }
