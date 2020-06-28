@@ -5,6 +5,9 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
@@ -74,6 +77,10 @@ public class HBaseDao {
      * @param attends
      */
     public static void addAttends(String uid, String... attends) throws IOException {
+        if (attends.length <= 0){
+            System.out.println("请添加要关注的用户");
+            return;
+        }
         Connection connection = ConnectionFactory.createConnection(Constants.CONFIGURATION);
         Table relationTable =
                 connection.getTable(TableName.valueOf(Constants.RELATTION_TABLE));
@@ -130,8 +137,19 @@ public class HBaseDao {
         connection.close();
     }
 
+    /**
+     * 某个用户取消关注，删除关注列表 粉丝列表 以及消息通知表
+     *
+     * @param uid
+     * @param dels
+     * @throws IOException
+     */
     public static void deleteAttends(String uid, String... dels) throws IOException {
 
+        if (dels.length <= 0){
+            System.out.println("请添加要取关的用户");
+            return;
+        }
         Connection connection = ConnectionFactory.createConnection(Constants.CONFIGURATION);
         Table relationTable =
                 connection.getTable(TableName.valueOf(Constants.RELATTION_TABLE));
@@ -162,6 +180,79 @@ public class HBaseDao {
         inboxTable.delete(inboxUidDelete);
         inboxTable.close();
         relationTable.close();
+        connection.close();
+
+
+    }
+
+    /**
+     * 展示登录用户的信息
+     * @param userId
+     * @throws IOException
+     */
+
+    public static void getInit(String userId) throws IOException {
+        Connection connection = ConnectionFactory.createConnection(Constants.CONFIGURATION);
+        Table inboxTable =
+                connection.getTable(TableName.valueOf(Constants.INBOX_TABLE));
+
+        Table contentTable =
+                connection.getTable(TableName.valueOf(Constants.CONTENT_TABLE));
+        Get inboxGet = new Get(Bytes.toBytes(userId));
+        inboxGet.setMaxVersions();
+        Result result = inboxTable.get(inboxGet);
+
+        for (Cell inboxCell : result.rawCells()) {
+            Get contentGet = new Get(CellUtil.cloneValue(inboxCell));
+
+            Result contentResult = contentTable.get(contentGet);
+
+            for (Cell contentCell : contentResult.rawCells()) {
+
+                System.out.println("rowKey:" + Bytes.toString(CellUtil.cloneRow(contentCell)) +
+                        "  CF:" + Bytes.toString(CellUtil.cloneFamily(contentCell)) +
+                        "  CN:" + Bytes.toString(CellUtil.cloneQualifier(contentCell)) +
+                        "  VALUE:" + Bytes.toString(CellUtil.cloneValue(contentCell))
+                );
+
+            }
+        }
+        inboxTable.close();
+        contentTable.close();
+        connection.close();
+
+    }
+
+    /**
+     * 获取某个用户的全部微博
+     * 使用过滤器的方法 实现
+     * @param userId
+     * @throws IOException
+     */
+    public static void getWeibo(String userId) throws IOException {
+        Connection connection = ConnectionFactory.createConnection(Constants.CONFIGURATION);
+        Table contentTable =
+                connection.getTable(TableName.valueOf(Constants.CONTENT_TABLE));
+
+        Scan scan = new Scan();
+//        rowKey 过滤器
+//        rowkey 会截取字符串 与SubstringComparator里的字符串比较，是否相等（EQUAL）
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.EQUAL,
+                new SubstringComparator(userId + "_"));
+        scan.setFilter(rowFilter);
+        ResultScanner scanner = contentTable.getScanner(scan);
+
+        for (Result result : scanner) {
+            for (Cell contentCell : result.rawCells()) {
+                System.out.println("rowKey:" + Bytes.toString(CellUtil.cloneRow(contentCell)) +
+                        "  CF:" + Bytes.toString(CellUtil.cloneFamily(contentCell)) +
+                        "  CN:" + Bytes.toString(CellUtil.cloneQualifier(contentCell)) +
+                        "  VALUE:" + Bytes.toString(CellUtil.cloneValue(contentCell))
+                );
+
+            }
+        }
+        contentTable.close();
         connection.close();
 
 
